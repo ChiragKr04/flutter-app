@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './answers.dart';
 import './question_answer.dart';
-import './questions.dart';
+import './quiz.dart';
+import './result.dart';
 
 // Open emulator
 // flutter emulator --launch Pixel_4_API_28 //cmd command
@@ -26,15 +26,15 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   var _questionIdx = 0;
   var _answerIdx = 0;
-
   void _funPress() {
     setState(() {
-      if (_questionIdx == 2 || _answerIdx == 2) {
-        _questionIdx = 2;
-        _answerIdx = 2;
-      } else {
+      print(questionMap.length);
+      if (_questionIdx < questionMap.length + 1) {
         _answerIdx += 1;
         _questionIdx += 1;
+      } else {
+        _questionIdx = 0;
+        _answerIdx = 0;
       }
     });
     print(_questionIdx);
@@ -49,17 +49,13 @@ class MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text("Quiz App"),
         ),
-        body: Column(
-          children: [
-            Questions(
-              questionMap[_questionIdx]["question"],
-            ),
-            ...(questionMap[_questionIdx]["answers"] as List<String>)
-                .map((answers) {
-              return Answer(_funPress, answers);
-            }).toList(),
-          ],
-        ),
+        // This is ternary example where changing UI with certain condition using ? and :
+        body: _questionIdx < questionMap.length
+            ? Quiz(
+                _questionIdx,
+                _funPress,
+              )
+            : Result(),
       ),
     );
   }
