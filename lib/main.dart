@@ -26,15 +26,22 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   var _questionIdx = 0;
   var _answerIdx = 0;
-  void _funPress() {
+  var _totalScore = 0;
+
+  void _resetQuiz() {
+    setState(() {
+      _questionIdx = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _funPress(int score) {
     setState(() {
       print(questionMap.length);
+      _totalScore += score;
       if (_questionIdx < questionMap.length + 1) {
         _answerIdx += 1;
         _questionIdx += 1;
-      } else {
-        _questionIdx = 0;
-        _answerIdx = 0;
       }
     });
     print(_questionIdx);
@@ -55,7 +62,7 @@ class MyAppState extends State<MyApp> {
                 _questionIdx,
                 _funPress,
               )
-            : Result(),
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
